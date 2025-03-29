@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:explorer_web/colors.dart';
-import 'package:provider/provider.dart';
-import 'package:explorer_web/services/auth/auth_service.dart';
+
+import 'package:explorer_web/services/loan_service.dart';
+import 'package:intl/intl.dart';
+import 'package:explorer_web/components/loan_overview.dart';
+import 'package:explorer_web/components/payment_history.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -13,59 +15,57 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-
-  void signOut() {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    authService.signOut();
-  }
+  final LoanService _loanService = LoanService();
+  final currencyFormat = NumberFormat.currency(symbol: '\$');
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Explorer", style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.w500)),
-        backgroundColor: explorerBlue,
-        toolbarHeight: 80,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              onPressed: signOut,
-              icon: const Icon(Icons.logout, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-      
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Column(
-              children: [
-                Expanded(child: Container(color: Colors.white)),
-              ],
-            ),
-          ),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Welcome to Explorer",
-                  style: Theme.of(context).textTheme.bodyLarge,
+      body: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _loanService.getCurrentUserLoan(),
+        builder: (context, loanSnapshot) {
+          if (loanSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!loanSnapshot.hasData || loanSnapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "No active loans found",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => _loanService.seedInitialData(),
+                    child: const Text("Create Sample Loan Data"),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final loanData = loanSnapshot.data!.docs.first.data() as Map<String, dynamic>;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LoanOverview(loanData: loanData),
+              const SizedBox(height: 24),
+              Expanded(
+                child: PaymentHistory(
+                  loanId: loanData['loan_id'],
+                  loanService: _loanService,
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Get Started"),
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
-    );
+    ));
   }
 }

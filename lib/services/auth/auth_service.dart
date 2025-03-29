@@ -7,14 +7,18 @@ class AuthService extends ChangeNotifier{
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Future<UserCredential> signInWithEmailAndPassword(
-    String email, String password) async {
+    String email, String password, String firstName, String lastName, String university) async {
     try {
       UserCredential userCredential = 
         await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
 
         _fireStore.collection('users').doc(userCredential.user!.uid).set({
           'uid': userCredential.user!.uid,
+          'f_name': firstName,
+          'l_name': lastName,
           'email': email,
+          'University': university,
+          'createdAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
         return userCredential;
@@ -24,13 +28,17 @@ class AuthService extends ChangeNotifier{
     }
 
     Future<UserCredential> signUpWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String firstName, String lastName, String university) async {
       try {
         UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
         _fireStore.collection('users').doc(userCredential.user!.uid).set({
           'uid': userCredential.user!.uid,
           'email': email,
+          'f_name': firstName,
+          'l_name': lastName,
+          'University': university,
+          'createdAt': FieldValue.serverTimestamp(),
         });
 
 

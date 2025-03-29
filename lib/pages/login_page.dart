@@ -4,6 +4,7 @@ import 'package:explorer_web/components/my_button.dart';
 import 'package:explorer_web/components/text_field.dart';
 import 'package:explorer_web/services/auth/auth_service.dart';
 import 'package:explorer_web/colors.dart';
+import 'package:explorer_web/utils.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onTap;
@@ -16,6 +17,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final universityController = TextEditingController();
 
   void signIn() async {
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -23,7 +27,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await authService.signInWithEmailAndPassword(
         emailController.text,
-        passwordController.text,
+        passwordController.text, 
+        firstNameController.text,
+        lastNameController.text,
+        universityController.text,
       );
     } catch (e) {
       // ignore: use_build_context_synchronously
@@ -42,19 +49,19 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Explorer",
-              style: TextStyle(fontSize: 68, fontWeight: FontWeight.w600, color: Colors.white)
-            ),
+            child: Image.asset(
+                explorerLogo,
+                height: 100,
+              ),
           ),
         
         const SizedBox(height: 100),
 
           //email textfield
          SizedBox(
-            width: 600,
+            width: 500,
            child: MyTextField(
             controller: emailController,
             hintText: 'Email',
@@ -66,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
         
         //Password
           SizedBox(
-            width: 600,
+            width: 500,
             child: MyTextField(
             controller: passwordController,
             hintText: 'Password',
@@ -77,8 +84,8 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 32),
 
           SizedBox(
-            width: 600,
-            child: MyButton(onTap: signIn, text: "Sign in", color: Colors.blue,)),
+            width: 500,
+            child: MyButton(onTap: signIn, text: "Sign in", color: Colors.black,)),
 
           const SizedBox(height: 16),
 

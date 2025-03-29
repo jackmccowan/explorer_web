@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:explorer_web/components/my_button.dart';
 import 'package:explorer_web/components/text_field.dart';
 import 'package:explorer_web/services/auth/auth_service.dart';
+import 'package:explorer_web/utils.dart';
+
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -17,6 +19,9 @@ class _RegisterPageState extends State<RegisterPage> {
    final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final universityController = TextEditingController();
 
   void signUp() async {
     if (passwordController.text != confirmPasswordController.text) {
@@ -29,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
-      await authService.signUpWithEmailAndPassword(emailController.text, passwordController.text);
+      await authService.signUpWithEmailAndPassword(emailController.text, passwordController.text, firstNameController.text, lastNameController.text, universityController.text);
     } catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -46,21 +51,53 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Explorer",
-              style: TextStyle(fontSize: 68, fontWeight: FontWeight.w600, color: Colors.white)
-            ),
-
+          Padding(
+            padding: EdgeInsets.all(60.0),
+            child: Image.asset(
+                explorerLogo,
+                height: 100,
+              ),
           ),
-          const Text("Create an account", style: TextStyle(color: Colors.white, fontSize: 22)),
-        
-        const SizedBox(height: 32),
+          const Text("Create an account", style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold)),
 
-          //email textfield
+        const SizedBox(height: 12),
+
          SizedBox(
-            width: 600,
+            width: 500,
+           child: MyTextField(
+            controller: firstNameController,
+            hintText: 'First Name',
+            obscureText: false,
+            ),
+         ),
+
+        const SizedBox(height: 12),
+
+         SizedBox(
+            width: 500,
+           child: MyTextField(
+            controller: lastNameController,
+            hintText: 'Last Name',
+            obscureText: false,
+            ),
+         ),
+
+        const SizedBox(height: 12),
+
+        SizedBox(
+            width: 500,
+           child: MyTextField(
+            controller: universityController,
+            hintText: 'University', //this needs to be changed to a dropdown
+            obscureText: false,
+            ),
+         ),
+
+        const SizedBox(height: 12),
+        
+
+         SizedBox(
+            width: 500,
            child: MyTextField(
             controller: emailController,
             hintText: 'Email',
@@ -70,9 +107,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
           const SizedBox(height: 12),
         
-          //Password
             SizedBox(
-              width: 600,
+              width: 500,
               child: MyTextField(
               controller: passwordController,
               hintText: 'Password',
@@ -83,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 12),
 
           SizedBox(
-            width: 600,
+            width: 500,
             child: MyTextField(
             controller: confirmPasswordController,
             hintText: 'Confirm Password',
@@ -94,8 +130,8 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 32),
 
           SizedBox(
-            width: 600,
-            child: MyButton(onTap: signUp, text: "Sign up", color: Colors.blue)),
+            width: 500,
+            child: MyButton(onTap: signUp, text: "Sign up", color: Colors.black)),
 
           const SizedBox(height: 12),
 
