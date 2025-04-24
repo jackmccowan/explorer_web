@@ -13,16 +13,21 @@ class MyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell( // Use InkWell for ripple effect
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
         ),
-        child: Center(child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 16),),),
-      )
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+        ),
+      ),
     );
   }
 }

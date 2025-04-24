@@ -1,3 +1,4 @@
+import 'package:explorer_web/components/nav_card.dart';
 import 'package:flutter/material.dart';
 import 'package:explorer_web/utils.dart';
 import 'package:explorer_web/colors.dart';
@@ -42,64 +43,117 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0),
-              child: Image.asset(
-                explorerLogo,
-                height: 50,
-              ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            shadowColor: Colors.black,
+            elevation: 5,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Image.asset(
+                    explorerLogo,
+                    height: 30,
+                  ),
+                ),
+                Flexible(
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.black,
+                    indicatorColor: Colors.transparent,
+                    dividerColor: Colors.transparent,
+                    tabs: const [
+                      Tab(text: 'EXPLORER 500',),
+                      Tab(text: 'TRAVEL LOANS'),
+                      Tab(text: 'PLANNING YOUR TRIP'),
+                      Tab(text: 'AMBASSADORS'),
+                      Tab(text: 'INVESTORS'),
+                      Tab(text: 'GET TRAVELLING'),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 20),
-            Container(
-              height: 50,
-              child: const VerticalDivider(
-                color: Colors.black,
-                thickness: 4,
-                width: 1,
+            toolbarHeight: 60,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.person, color: explorerBlue),
+                onPressed: () {
+                  // Profile button action
+                },
               ),
-            ),
-            const SizedBox(width: 32),
-            Flexible(
-              child: TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.black,
-                indicatorColor: Colors.black,
-                dividerColor: Colors.transparent,
-                tabs: const [
-                  Tab(text: 'Dashboard',),
-                  Tab(text: 'Loans'),
-                  Tab(text: 'Documents'),
+              SizedBox(width: 20),
+              Padding(
+                padding: const EdgeInsets.only(right: 60.0),
+                child: IconButton(
+                  onPressed: () => signOut(context),
+                  icon: const Icon(Icons.logout, color: explorerBlue),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+     body: Row(
+        children: [
+          Container(
+            width: 142,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0, top: 32),
+              child: Column(
+                children: [
+                  NavCard(
+                    logo: homeLogo,
+                    text: 'Home',
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 0;
+                      });
+                    },
+                    selected: _selectedIndex == 0,
+                  ),
+                  NavCard(
+                    logo: homeLogo,
+                    text: 'Loans',
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 1;
+                      });
+                    },
+                    selected: _selectedIndex == 1,
+                  ),
+                  NavCard(
+                    logo: homeLogo, 
+                    text: 'Documents',
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 2; 
+                      });
+                    },
+                    selected: _selectedIndex == 2,
+                  ),
+                  NavCard(
+                    logo: homeLogo, 
+                    text: 'Settings',
+                    onTap: () {
+                    },
+                    selected: _selectedIndex == 3,
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-        backgroundColor: explorerBlue,
-        toolbarHeight: 80,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
-            onPressed: () {
-              // Profile button action
-            },
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              onPressed: () => signOut(context),
-              icon: const Icon(Icons.logout, color: Colors.white),
-            ),
+          Expanded(
+            child: _pages[_selectedIndex],
           ),
-        ],
-      ),
-      body: _pages[_selectedIndex],
-    );
+    ]));
   }
 }

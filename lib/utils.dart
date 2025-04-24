@@ -7,4 +7,7 @@
     authService.signOut();
   }
 
-  const String explorerLogo = 'assets/images/explorerLogo.png';
+  const String explorerLogo = 'assets/images/explorerLogoBlue.png';
+  const String explorerLogoWhite = 'assets/images/explorerLogoWhite.png';
+  const String homeLogo = 'assets/images/home.png';
+

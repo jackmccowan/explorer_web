@@ -28,9 +28,6 @@ class _LoginPageState extends State<LoginPage> {
       await authService.signInWithEmailAndPassword(
         emailController.text,
         passwordController.text, 
-        firstNameController.text,
-        lastNameController.text,
-        universityController.text,
       );
     } catch (e) {
       // ignore: use_build_context_synchronously
@@ -52,14 +49,13 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Image.asset(
-                explorerLogo,
+                explorerLogoWhite,
                 height: 100,
               ),
           ),
         
         const SizedBox(height: 100),
 
-          //email textfield
          SizedBox(
             width: 500,
            child: MyTextField(
@@ -71,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(height: 12),
         
-        //Password
           SizedBox(
             width: 500,
             child: MyTextField(

@@ -52,15 +52,15 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
           Padding(
-            padding: EdgeInsets.all(60.0),
+            padding: EdgeInsets.all(20.0),
             child: Image.asset(
-                explorerLogo,
+                explorerLogoWhite,
                 height: 100,
               ),
           ),
-          const Text("Create an account", style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold)),
+          const Text("Create an account", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 22),
 
          SizedBox(
             width: 500,
